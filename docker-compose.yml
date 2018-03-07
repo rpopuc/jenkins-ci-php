@@ -13,7 +13,7 @@ services:
             - 50000:50000
         volumes:
             - ./data/jenkins:/var/jenkins_home
-            - ./updates/jenkins-2.89.4.war:/usr/share/jenkins/jenkins.war
+            - ./update/jenkins-2.89.4.war:/usr/share/jenkins/jenkins.war
 
     php7-node:
         build:
