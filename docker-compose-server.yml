@@ -1,0 +1,44 @@
+version: "2"
+
+services:
+    storage:
+        image: tianon/true
+        volumes:
+            - ./data/workspace:/home/jenkins
+
+    jenkins:
+        image: jenkins:alpine
+        expose:
+            - 8080
+            - 50000
+        volumes:
+            - ./data/jenkins:/var/jenkins_home
+            - ./update/jenkins-2.89.4.war:/usr/share/jenkins/jenkins.war
+        networks:
+            - frontend
+
+    php7-node:
+        build:
+            context: ./docker/php7-jenkins-node
+        volumes_from:
+            - storage
+        expose:
+            - 22
+
+    docker-node:
+        privileged: true
+        build:
+            context: ./docker/docker-node
+        volumes_from:
+            - storage
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        expose:
+            - 22
+
+### Networks Setup ############################################
+
+networks:
+    frontend:
+        external:
+            name: proxy-network
